@@ -32,12 +32,7 @@ class _MyAppState extends State<MyApp> {
       title: kAppName,
       theme: kThemeData,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text(kAppName),
-        ),
-        body: Center(
-          child: _screenOptions.elementAt(_selectedIndex),
-        ),
+        body: _screenOptions.elementAt(_selectedIndex),
         bottomNavigationBar: BottomNavigationBar(
           items: kNavItems
               .map(
