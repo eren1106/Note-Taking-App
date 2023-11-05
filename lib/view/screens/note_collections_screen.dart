@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_taking_app/constants/mocks.dart';
+import 'package:note_taking_app/constants/padding.dart';
 import 'package:note_taking_app/model/note_collection.dart';
 import 'package:note_taking_app/utils/utils.dart';
 import 'package:note_taking_app/view/screens/notes_screen.dart';
@@ -16,9 +17,18 @@ class NoteCollectionsScreen extends StatefulWidget {
 
 class _NoteCollectionsScreenState extends State<NoteCollectionsScreen> {
   void showCreateCollectionModal() {
-    // TODO: show modal
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Makes the modal full height
+      backgroundColor: const Color.fromRGBO(255, 0, 0, 0),
+      builder: (context) => SizedBox(
+        height: MediaQuery.of(context).size.height *
+            0.6, // Set the height to 60% of the screen's height
+        child: const CreateCollectionModal(),
+      ),
+    );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return ScreenWrapper(
@@ -88,6 +98,60 @@ class NoteCollectionCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CreateCollectionModal extends StatefulWidget {
+  const CreateCollectionModal({super.key});
+
+  @override
+  _CreateCollectionModalState createState() => _CreateCollectionModalState();
+}
+
+class _CreateCollectionModalState extends State<CreateCollectionModal> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: KPadding.a24,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30), // Add rounded corners to the top
+        ),
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Create a New Collection",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const TextField(
+            decoration: InputDecoration(
+              label: Text("Title"),
+            ),
+          ),
+          const TextField(
+            decoration: InputDecoration(
+              label: Text("Description"),
+            ),
+          ),
+          const Gap(y: 12,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: (){},
+                child: const Text("Cancel"),
+              ),
+              const Gap(x: 16),
+              ElevatedButton(
+                onPressed: (){},
+                child: const Text("Create"),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
