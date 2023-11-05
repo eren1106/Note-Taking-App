@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ScreenWrapper extends StatelessWidget {
-  final Widget child;
   final String title;
+  final Widget child;
   final Function()? floatingAction;
   final EdgeInsetsGeometry? padding;
 
   const ScreenWrapper({
     super.key,
-    required this.child,
     required this.title,
+    required this.child,
     this.floatingAction,
     this.padding = const EdgeInsets.all(20),
   });
