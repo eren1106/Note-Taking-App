@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderSide: BorderSide.none,
                 ),
                 filled: true,
-                fillColor: Colors.purple[100],
+                fillColor: Colors.purple[50],
               ),
             ),
             const Gap(y: 8),
