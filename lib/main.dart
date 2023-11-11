@@ -3,7 +3,7 @@ import 'package:note_taking_app/constants/nav_items.dart';
 import 'package:note_taking_app/constants/strings.dart';
 import 'package:note_taking_app/constants/theme.dart';
 
-void main() {
+void main() async{
   runApp(const MyApp());
 }
 
