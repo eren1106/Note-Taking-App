@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:note_taking_app/constants/mocks.dart';
+import 'package:note_taking_app/model/apis/api_response.dart';
 import 'package:note_taking_app/model/note.dart';
 import 'package:note_taking_app/utils/utils.dart';
 import 'package:note_taking_app/view/screens/note_detail_screen.dart';
 import 'package:note_taking_app/view/widgets/gap.dart';
 import 'package:note_taking_app/view/widgets/screen_wrapper.dart';
+import 'package:note_taking_app/view_model/note_view_model.dart';
+import 'package:provider/provider.dart';
 
 class NotesScreen extends StatefulWidget {
   final String title;
@@ -17,17 +20,40 @@ class NotesScreen extends StatefulWidget {
 
 class _NotesScreenState extends State<NotesScreen> {
   @override
+  void initState() {
+    super.initState();
+    context.read<NoteViewModel>().fetchNotes();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ScreenWrapper(
       title: widget.title,
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of items per row
-        ),
-        itemCount: mockNotes.length,
-        itemBuilder: (context, index) {
-          Note note = mockNotes[index];
-          return NoteCard(note: note);
+      child: Consumer<NoteViewModel>(
+        builder: (context, noteViewModel, child) {
+          switch (noteViewModel.response.status) {
+            case Status.LOADING:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case Status.COMPLETED:
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Number of items per row
+                ),
+                itemCount: noteViewModel.notes.length,
+                itemBuilder: (context, index) {
+                  Note note = noteViewModel.notes[index];
+                  return NoteCard(note: note);
+                },
+              );
+            case Status.ERROR:
+              return Center(
+                child: Text('Error: ${noteViewModel.response.message}'),
+              );
+            default:
+              return const Center();
+          }
         },
       ),
     );
