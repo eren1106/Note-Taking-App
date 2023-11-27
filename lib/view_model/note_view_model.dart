@@ -25,4 +25,43 @@ class NoteViewModel extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+Future<void> createNote(Note note) async {
+    _apiResponse = ApiResponse.loading('Creating notes');
+    notifyListeners();
+    try {
+      await _noteService.createNote(note);
+      _apiResponse = ApiResponse.completed('Create successfully');
+    } catch (e) {
+      _apiResponse = ApiResponse.error(e.toString());
+      print(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateNote(Note note) async {
+    _apiResponse = ApiResponse.loading('Updating notes');
+    notifyListeners();
+    try {
+      await _noteService.updateNote(note);
+      _apiResponse = ApiResponse.completed('Update successfully');
+    } catch (e) {
+      _apiResponse = ApiResponse.error(e.toString());
+      print(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> deleteNote(String id) async {
+    _apiResponse = ApiResponse.loading('Deleting notes');
+    notifyListeners();
+    try {
+      await _noteService.deleteNote(id);
+      _apiResponse = ApiResponse.completed('Delete successfully');
+    } catch (e) {
+      _apiResponse = ApiResponse.error(e.toString());
+      print(e);
+    }
+    notifyListeners();
+  }
 }

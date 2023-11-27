@@ -5,6 +5,8 @@ import 'package:note_taking_app/model/note.dart';
 import 'package:note_taking_app/utils/utils.dart';
 import 'package:note_taking_app/view/widgets/gap.dart';
 import 'package:note_taking_app/view/widgets/screen_wrapper.dart';
+import 'package:note_taking_app/view_model/note_view_model.dart';
+import 'package:provider/provider.dart';
 
 class NoteDetailScreen extends StatefulWidget {
   final Note note;
@@ -38,15 +40,25 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     });
   }
 
-  void handleSave() {
+  void handleSave() async{
+    await context.read<NoteViewModel>().updateNote(widget.note.copyWith(
+      title: _titleController.text,
+      content: _contentController.text,
+    ));
+    // TODO: show success/error dialog
     handleToggleEdit();
   }
 
-  void handleDelete(BuildContext context) {
+  void handleDelete(BuildContext context, String id) {
     showCustomDialog(
       context: context,
       title: "Delete Confirmation",
       content: "Are you sure want to delete this note?",
+      onConfirm: () async {
+        await context.read<NoteViewModel>().deleteNote(id);
+        // TODO: show success/error dialog
+        Navigator.pop(context);
+      }
     );
   }
 
@@ -80,7 +92,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                           ),
                           IconButton(
                             onPressed: () {
-                              handleDelete(context);
+                              handleDelete(context, widget.note.id);
                             },
                             icon: const Icon(Icons.delete),
                           ),

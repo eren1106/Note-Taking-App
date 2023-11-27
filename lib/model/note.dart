@@ -34,4 +34,20 @@ class Note {
       // 'updatedDateTime': updatedDateTime?.toIso8601String(),
     };
   }
+
+  Note copyWith({
+    String? id,
+    String? title,
+    String? content,
+    DateTime? createdDateTime,
+    DateTime? updatedDateTime,
+  }) {
+    return Note(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      createdDateTime: createdDateTime ?? this.createdDateTime,
+      updatedDateTime: updatedDateTime ?? this.updatedDateTime,
+    );
+  }
 }
