@@ -9,8 +9,10 @@ class NoteViewModel extends ChangeNotifier {
 
   final NoteService _noteService = NoteService();
   List<Note> _notes = [];
+  late Note _selectedNote;
 
   List<Note> get notes => _notes;
+  Note get selectedNote => _selectedNote;
   ApiResponse get response => _apiResponse;
 
   Future<void> fetchNotes() async {
@@ -26,7 +28,20 @@ class NoteViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-Future<void> createNote(Note note) async {
+  Future<void> fetchNoteById(String id) async {
+    _apiResponse = ApiResponse.loading('Fetching note');
+    notifyListeners();
+    try {
+      _selectedNote = await _noteService.fetchNoteById(id);
+      _apiResponse = ApiResponse.completed(_selectedNote);
+    } catch (e) {
+      _apiResponse = ApiResponse.error(e.toString());
+      print(e);
+    }
+    notifyListeners();
+  }
+
+  Future<void> createNote(Note note) async {
     _apiResponse = ApiResponse.loading('Creating notes');
     notifyListeners();
     try {
@@ -40,7 +55,7 @@ Future<void> createNote(Note note) async {
   }
 
   Future<void> updateNote(Note note) async {
-    _apiResponse = ApiResponse.loading('Updating notes');
+    _apiResponse = ApiResponse.loading('Updating note');
     notifyListeners();
     try {
       await _noteService.updateNote(note);
@@ -53,7 +68,7 @@ Future<void> createNote(Note note) async {
   }
 
   Future<void> deleteNote(String id) async {
-    _apiResponse = ApiResponse.loading('Deleting notes');
+    _apiResponse = ApiResponse.loading('Deleting note');
     notifyListeners();
     try {
       await _noteService.deleteNote(id);

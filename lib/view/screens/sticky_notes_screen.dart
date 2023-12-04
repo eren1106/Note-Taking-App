@@ -44,7 +44,7 @@ class NoteCard extends StatelessWidget {
     navigatorPush(
       context,
       NoteDetailScreen(
-        note: note,
+        id: note.id,
       ),
     );
   }

@@ -1,7 +1,6 @@
 // service/note_service.dart
 import 'package:dio/dio.dart';
 import 'package:note_taking_app/constants/api.dart';
-import 'package:note_taking_app/constants/mocks.dart';
 import 'package:note_taking_app/model/note.dart';
 
 class NoteService {
@@ -21,6 +20,21 @@ class NoteService {
       }
     } catch (error) {
       throw Exception('Failed to fetch notes: $error');
+    }
+  }
+
+  Future<Note> fetchNoteById(String id) async {
+    try {
+      final res = await _dio.get(ApiRoutes.getNote(id));
+      if (res.statusCode == 200) {
+        Note data = Note.fromJson(res.data['data']);
+        print(data);
+        return data;
+      } else {
+        throw Exception('Failed to fetch note');
+      }
+    } catch (error) {
+      throw Exception('Failed to fetch note: $error');
     }
   }
 

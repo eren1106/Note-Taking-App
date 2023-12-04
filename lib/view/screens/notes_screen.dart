@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:note_taking_app/constants/mocks.dart';
+import 'package:go_router/go_router.dart';
+import 'package:note_taking_app/constants/routes.dart';
 import 'package:note_taking_app/model/apis/api_response.dart';
 import 'package:note_taking_app/model/note.dart';
 import 'package:note_taking_app/utils/utils.dart';
@@ -69,12 +70,7 @@ class NoteCard extends StatelessWidget {
   });
 
   void handleTapCollectionCard(BuildContext context) {
-    navigatorPush(
-      context,
-      NoteDetailScreen(
-        note: note,
-      ),
-    );
+    context.go('${ROUTES_NAME.noteDetail}/${note.id}');
   }
 
   @override
