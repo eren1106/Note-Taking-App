@@ -8,7 +8,7 @@ class ScreenWrapper extends StatelessWidget {
 
   const ScreenWrapper({
     super.key,
-    required this.title,
+    this.title = "",
     required this.child,
     this.floatingAction,
     this.padding = const EdgeInsets.all(20),

@@ -25,20 +25,17 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   bool _editing = false;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
-  late Note note;
 
   @override
   void initState() {
     super.initState();
-    note = context.watch<NoteViewModel>().selectedNote;
+    // Fetch the note by ID
     context.read<NoteViewModel>().fetchNoteById(widget.id);
-    _initializeControllers();
   }
 
-  void _initializeControllers() {
-    _titleController.text = context.read<NoteViewModel>().selectedNote.title;
-    _contentController.text =
-        context.read<NoteViewModel>().selectedNote.content;
+  void _assignTextToController(String title, String content) {
+    _titleController.text = title;
+    _contentController.text = content;
   }
 
   void handleToggleEdit() {
@@ -47,7 +44,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     });
   }
 
-  void handleSave() async {
+  void handleSave(Note note) async {
     try {
       await context.read<NoteViewModel>().updateNote(
             note.copyWith(
@@ -81,51 +78,33 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     );
   }
 
-  Widget _buildEditMode() {
-    return TextField(
-      controller: _contentController,
-      keyboardType: TextInputType.multiline,
-      minLines: 20,
-      maxLines: null,
-      decoration: InputDecoration(
-        hintText: 'Write something...',
-        contentPadding: const EdgeInsets.all(16),
-        border: const OutlineInputBorder(
-          borderSide: BorderSide.none,
-        ),
-        filled: true,
-        fillColor: Colors.purple[50],
-      ),
-    );
-  }
-
-  Widget _buildDisplayMode() {
-    return Text(
-      note.content,
-      style: KTextStyle.n14,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ScreenWrapper(
-      title: note.title,
-      child: Consumer<NoteViewModel>(
-        builder: (context, noteViewModel, child) {
-          switch (noteViewModel.response.status) {
-            case Status.LOADING:
-              return const Center(
+    return Consumer<NoteViewModel>(
+      builder: (context, noteViewModel, child) {
+        Note note = noteViewModel.selectedNote;
+        switch (noteViewModel.response.status) {
+          case Status.LOADING:
+            return const ScreenWrapper(
+              child: Center(
                 child: CircularProgressIndicator(),
-              );
-            case Status.COMPLETED:
-              return SingleChildScrollView(
+              ),
+            );
+          case Status.COMPLETED:
+            return ScreenWrapper(
+              title: note.title,
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _editing
-                            ? Expanded(child: _buildEditMode())
+                            ? Expanded(
+                                child: TextField(
+                                  controller: _titleController,
+                                ),
+                              )
                             : Text(
                                 note.title,
                                 style: KTextStyle.b19,
@@ -135,12 +114,16 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                             : Row(
                                 children: [
                                   IconButton(
-                                    onPressed: handleToggleEdit,
+                                    onPressed: () {
+                                      _assignTextToController(
+                                          note.title, note.content);
+                                      handleToggleEdit();
+                                    },
                                     icon: const Icon(Icons.edit),
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      handleDelete(context, note.id);
+                                      handleDelete(context, widget.id);
                                     },
                                     icon: const Icon(Icons.delete),
                                   ),
@@ -149,7 +132,27 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                       ],
                     ),
                     const Gap(y: 12),
-                    _editing ? _buildEditMode() : _buildDisplayMode(),
+                    _editing
+                        ? TextField(
+                            controller: _contentController,
+                            keyboardType: TextInputType.multiline,
+                            minLines: 20,
+                            maxLines: null,
+                            decoration: InputDecoration(
+                              hintText: 'Write something...',
+                              contentPadding: const EdgeInsets.all(16),
+                              border: const OutlineInputBorder(
+                                // borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                              fillColor: Colors.purple[50],
+                            ),
+                          )
+                        : Text(
+                            note.content,
+                            style: KTextStyle.n14,
+                          ),
                     const Gap(y: 12),
                     _editing
                         ? Row(
@@ -159,14 +162,15 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                 onPressed: () {
                                   setState(() {
                                     _editing = false;
-                                    _initializeControllers();
                                   });
                                 },
                                 child: const Text("Cancel"),
                               ),
                               const Gap(x: 16),
                               ElevatedButton(
-                                onPressed: handleSave,
+                                onPressed: () {
+                                  handleSave(note);
+                                },
                                 child: const Text("Save"),
                               ),
                             ],
@@ -174,16 +178,18 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         : Container(),
                   ],
                 ),
-              );
-            case Status.ERROR:
-              return Center(
+              ),
+            );
+          case Status.ERROR:
+            return ScreenWrapper(
+              child: Center(
                 child: Text('Error: ${noteViewModel.response.message}'),
-              );
-            default:
-              return const Center();
-          }
-        },
-      ),
+              ),
+            );
+          default:
+            return const Center();
+        }
+      },
     );
   }
 }

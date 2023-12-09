@@ -23,7 +23,9 @@ class _NotesScreenState extends State<NotesScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<NoteViewModel>().fetchNotes();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<NoteViewModel>().fetchNotes();
+    });
   }
 
   @override
