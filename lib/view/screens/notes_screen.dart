@@ -70,7 +70,8 @@ class NoteCard extends StatelessWidget {
   });
 
   void handleTapCollectionCard(BuildContext context) {
-    context.go('${ROUTES_NAME.noteDetail}/${note.id}');
+    context.go('/${ROUTES_NAME.noteCollections}/${ROUTES_NAME.notes}/${ROUTES_NAME.noteDetail}/${note.id}');
+    // context.goNamed('/${ROUTES_NAME.noteDetail}/${note.id}');
   }
 
   @override

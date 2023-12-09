@@ -30,33 +30,6 @@ final GoRouter _router = GoRouter(
   initialLocation: '/',
   navigatorKey: _rootNavigatorKey,
   routes: <RouteBase>[
-    // GoRoute(
-    //   path: '/',
-    //   builder: (BuildContext context, GoRouterState state) {
-    //     return const HomeScreen();
-    //   },
-    //   routes: <RouteBase>[
-    //     GoRoute(
-    //       path: ROUTES_NAME.noteCollections,
-    //       builder: (BuildContext context, GoRouterState state) {
-    //         return const NoteCollectionsScreen();
-    //       },
-    //     ),
-    //     GoRoute(
-    //       path: ROUTES_NAME.notes,
-    //       builder: (BuildContext context, GoRouterState state) {
-    //         return const NotesScreen();
-    //       },
-    //     ),
-    //     GoRoute(
-    //       path: '${ROUTES_NAME.noteDetail}/:id',
-    //       builder: (BuildContext context, GoRouterState state) {
-    //         final id = state.pathParameters['id']!;
-    //         return NoteDetailScreen(id: id);
-    //       },
-    //     ),
-    //   ],
-    // ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         // the UI shell
@@ -92,13 +65,26 @@ final GoRouter _router = GoRouter(
               pageBuilder: (context, state) => const NoTransitionPage(
                 child: NoteCollectionsScreen(),
               ),
-              // routes: [
-              //   // child route
-              //   GoRoute(
-              //     path: ROUTES_NAME.noteCollections,
-              //     builder: (context, state) => const NoteCollectionsScreen(),
-              //   ),
-              // ],
+              routes: [
+                // child route
+                GoRoute(
+                  path: ROUTES_NAME.notes,
+                  name: ROUTES_NAME.notes,
+                  builder: (context, state) => const NotesScreen(),
+                  routes: [
+                    GoRoute(
+                      path: '${ROUTES_NAME.noteDetail}/:id',
+                      name: '${ROUTES_NAME.noteDetail}/:id',
+                      builder: (context, state) {
+                        final id = state.pathParameters['id']!;
+                        return NoteDetailScreen(
+                          id: id,
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ],
             ),
           ],
         ),
