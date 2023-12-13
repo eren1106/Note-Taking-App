@@ -59,6 +59,7 @@ class NoteViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       await _noteService.updateNote(note);
+      _selectedNote = note;
       _apiResponse = ApiResponse.completed('Update successfully');
     } catch (e) {
       _apiResponse = ApiResponse.error(e.toString());
