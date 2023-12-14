@@ -93,6 +93,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           case Status.COMPLETED:
             return ScreenWrapper(
               title: note.title,
+              backCallback: (){
+                context.read<NoteViewModel>().fetchNotes();
+              },
+              allowDeviceBack: true,
               child: SingleChildScrollView(
                 child: Column(
                   children: [

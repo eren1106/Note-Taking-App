@@ -5,6 +5,8 @@ class ScreenWrapper extends StatelessWidget {
   final Widget child;
   final Function()? floatingAction;
   final EdgeInsetsGeometry? padding;
+  final bool allowDeviceBack;
+  final Function? backCallback;
 
   const ScreenWrapper({
     super.key,
@@ -12,6 +14,8 @@ class ScreenWrapper extends StatelessWidget {
     required this.child,
     this.floatingAction,
     this.padding = const EdgeInsets.all(20),
+    this.allowDeviceBack = true,
+    this.backCallback,
   });
 
   @override
@@ -28,17 +32,27 @@ class ScreenWrapper extends StatelessWidget {
         //   color: Colors.black,
         // ),
       ),
-      body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          padding: padding,
-          child: child,
+      body: WillPopScope(
+        onWillPop: () async {
+          backCallback?.call();
+          // Return true to allow the back button press
+          // Return false to prevent the back button press
+          return allowDeviceBack;
+        },
+        child: SafeArea(
+          child: Container(
+            width: double.infinity,
+            padding: padding,
+            child: child,
+          ),
         ),
       ),
-      floatingActionButton: floatingAction != null ? FloatingActionButton(
-        onPressed: floatingAction,
-        child: const Icon(Icons.add),
-      ) : null,
+      floatingActionButton: floatingAction != null
+          ? FloatingActionButton(
+              onPressed: floatingAction,
+              child: const Icon(Icons.add),
+            )
+          : null,
       // resizeToAvoidBottomInset: false,
       // backgroundColor: Colors.white,
     );
