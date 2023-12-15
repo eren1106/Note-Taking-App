@@ -82,7 +82,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   Widget build(BuildContext context) {
     return Consumer<NoteViewModel>(
       builder: (context, noteViewModel, child) {
-        Note note = noteViewModel.selectedNote;
         switch (noteViewModel.response.status) {
           case Status.LOADING:
             return const ScreenWrapper(
@@ -91,9 +90,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               ),
             );
           case Status.COMPLETED:
+            Note note = noteViewModel.selectedNote;
             return ScreenWrapper(
               title: note.title,
-              backCallback: (){
+              backCallback: () {
                 context.read<NoteViewModel>().fetchNotes();
               },
               allowDeviceBack: true,
