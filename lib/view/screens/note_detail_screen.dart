@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:note_taking_app/constants/padding.dart';
 import 'package:note_taking_app/constants/text_styles.dart';
 import 'package:note_taking_app/model/apis/api_response.dart';
@@ -52,9 +53,9 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               content: _contentController.text,
             ),
           );
-      // TODO: show success dialog
+      showSnackbar(context, "Successfully updated note!");
     } catch (error) {
-      // TODO: show error dialog
+      showSnackbar(context, "Failed to update note. Error: $error");
     } finally {
       handleToggleEdit();
     }
@@ -68,11 +69,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       onConfirm: () async {
         try {
           await context.read<NoteViewModel>().deleteNote(id);
-          // TODO: show success dialog
+          showSnackbar(context, "Successfully deleted note!");
         } catch (error) {
-          // TODO: show error dialog
+          showSnackbar(context, "Failed to delete note. Error: $error");
         } finally {
-          Navigator.pop(context);
+          // Navigator.pop(context);
+          context.pop();
+          context.read<NoteViewModel>().fetchNotes();
         }
       },
     );

@@ -41,3 +41,12 @@ void showCustomDialog({
     },
   );
 }
+
+void showSnackbar(BuildContext context, String message, {int? duration}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      duration: Duration(seconds: duration ?? 4),
+    ),
+  );
+}
