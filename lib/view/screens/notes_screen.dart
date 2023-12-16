@@ -28,10 +28,15 @@ class _NotesScreenState extends State<NotesScreen> {
     });
   }
 
+  void showCreateNoteModal() {
+    showBottomModal(context: context, child: const CreateNoteModal());
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenWrapper(
       title: widget.title,
+      floatingAction: showCreateNoteModal,
       child: Consumer<NoteViewModel>(
         builder: (context, noteViewModel, child) {
           switch (noteViewModel.response.status) {
@@ -71,7 +76,7 @@ class NoteCard extends StatelessWidget {
     required this.note,
   });
 
-  void handleTapCollectionCard(BuildContext context) {
+  void handleTapNoteCard(BuildContext context) {
     context.go('/${ROUTES_NAME.noteCollections}/${ROUTES_NAME.notes}/${ROUTES_NAME.noteDetail}/${note.id}');
     // context.goNamed('/${ROUTES_NAME.noteDetail}/${note.id}');
   }
@@ -80,7 +85,7 @@ class NoteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        handleTapCollectionCard(context);
+        handleTapNoteCard(context);
       },
       child: Card(
         child: Padding(
@@ -89,7 +94,7 @@ class NoteCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                note.title ?? "No Title",
+                note.title,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -101,6 +106,48 @@ class NoteCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CreateNoteModal extends StatelessWidget {
+  const CreateNoteModal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("Create a New Note",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        const TextField(
+          decoration: InputDecoration(
+            label: Text("Title"),
+          ),
+        ),
+        const TextField(
+          decoration: InputDecoration(
+            label: Text("Description"),
+          ),
+        ),
+        const Gap(
+          y: 12,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text("Cancel"),
+            ),
+            const Gap(x: 16),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text("Create"),
+            ),
+          ],
+        )
+      ],
     );
   }
 }
