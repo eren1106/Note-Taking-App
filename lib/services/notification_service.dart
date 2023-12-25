@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:go_router/go_router.dart';
+import 'package:note_taking_app/constants/routes.dart';
+import 'package:note_taking_app/main.dart';
+
+/*
+  NOTE FOR MYSELF:
+  this service is still not organized and has many issues that need improvement
+*/
 
 class NotificationService {
+  // TODO: This value is temporary and should be changed to the proper one.
+  static const String _channelKey = "reminders";
+
   static Future<void> initializeNotification() async {
     await AwesomeNotifications().initialize(
       null,
       [
         NotificationChannel(
           channelGroupKey: 'high_importance_channel',
-          channelKey: 'high_importance_channel',
+          channelKey: _channelKey,
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
           defaultColor: const Color(0xFF9D50DD),
@@ -21,6 +32,7 @@ class NotificationService {
         )
       ],
       channelGroups: [
+        // TODO: study what is this
         NotificationChannelGroup(
           channelGroupKey: 'high_importance_channel_group',
           channelGroupName: 'Group 1',
@@ -75,8 +87,19 @@ class NotificationService {
     //     ),
     //   );
     // }
+
+    // TODO: change to desired page
+    GoRouter.of(getRootNavigatorKey().currentContext!)
+        .goNamed(ROUTES_NAME.notes);
   }
 
+  /* EXAMPLE USAGE:
+  await NotificationService.showNotification(
+    title: "Title of the notification",
+    body: "Body of the notification",
+    summary: "Small Summary",
+    notificationLayout: NotificationLayout.Inbox,
+  ); */
   static Future<void> showNotification({
     required final String title,
     required final String body,
@@ -94,8 +117,8 @@ class NotificationService {
 
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: -1,
-        channelKey: 'high_importance_channel',
+        id: -1, // TODO: study usage of id and put a proper one
+        channelKey: _channelKey,
         title: title,
         body: body,
         actionType: actionType,
@@ -114,6 +137,31 @@ class NotificationService {
               preciseAlarm: true,
             )
           : null,
+    );
+  }
+
+  static Future<void> scheduleDailyReminderNotification({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime scheduledDate,
+  }) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: id,
+        channelKey: _channelKey, // Use a unique channel key for reminders
+        title: title,
+        body: body,
+      ),
+      // TODO: check if it will repeat daily on selected time
+      schedule: NotificationCalendar(
+        weekday: scheduledDate.weekday,
+        hour: scheduledDate.hour,
+        minute: scheduledDate.minute,
+        second: scheduledDate.second,
+        allowWhileIdle: true,
+        repeats: true,
+      ),
     );
   }
 }

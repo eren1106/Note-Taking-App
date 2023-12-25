@@ -4,7 +4,6 @@ import 'package:note_taking_app/constants/routes.dart';
 import 'package:note_taking_app/model/apis/api_response.dart';
 import 'package:note_taking_app/model/note.dart';
 import 'package:note_taking_app/utils/utils.dart';
-import 'package:note_taking_app/view/screens/note_detail_screen.dart';
 import 'package:note_taking_app/view/widgets/gap.dart';
 import 'package:note_taking_app/view/widgets/screen_wrapper.dart';
 import 'package:note_taking_app/view_model/note_view_model.dart';

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:note_taking_app/constants/nav_items.dart';
 import 'package:note_taking_app/constants/routes.dart';
 import 'package:note_taking_app/constants/strings.dart';
 import 'package:note_taking_app/constants/theme.dart';
-import 'package:note_taking_app/utils/notification_service.dart';
+import 'package:note_taking_app/services/notification_service.dart';
 import 'package:note_taking_app/view/screens/home_screen.dart';
 import 'package:note_taking_app/view/screens/note_collections_screen.dart';
 import 'package:note_taking_app/view/screens/note_detail_screen.dart';
@@ -23,6 +22,7 @@ void main() async {
 
 // private navigators
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
+GlobalKey<NavigatorState> getRootNavigatorKey() => _rootNavigatorKey;
 final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorCKey = GlobalKey<NavigatorState>(debugLabel: 'shellC');
@@ -142,15 +142,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int _selectedIndex = 0;
-  final List<Widget> _screenOptions =
-      kNavItems.map((navItem) => navItem.screen).toList();
+  // int _selectedIndex = 0;
+  // final List<Widget> _screenOptions =
+  //     kNavItems.map((navItem) => navItem.screen).toList();
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // void _onItemTapped(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
 
   // This widget is the root of your application.
   @override

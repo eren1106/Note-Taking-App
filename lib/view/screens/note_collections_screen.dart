@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:note_taking_app/constants/mocks.dart';
-import 'package:note_taking_app/constants/padding.dart';
 import 'package:note_taking_app/constants/routes.dart';
 import 'package:note_taking_app/model/note_collection.dart';
 import 'package:note_taking_app/utils/utils.dart';
-import 'package:note_taking_app/view/screens/notes_screen.dart';
 import 'package:note_taking_app/view/widgets/circle.dart';
 import 'package:note_taking_app/view/widgets/gap.dart';
 import 'package:note_taking_app/view/widgets/screen_wrapper.dart';

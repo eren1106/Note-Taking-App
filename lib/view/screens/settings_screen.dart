@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_taking_app/constants/text_styles.dart';
-import 'package:note_taking_app/utils/notification_service.dart';
+import 'package:note_taking_app/services/notification_service.dart';
 import 'package:note_taking_app/view/widgets/gap.dart';
 import 'package:note_taking_app/view/widgets/screen_wrapper.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -25,14 +25,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
       setState(() {
         _selectedTime = picked;
       });
-    }
 
-    await NotificationService.showNotification(
-      title: "Title of the notification",
-      body: "Body of the notification",
-      summary: "Small Summary",
-      notificationLayout: NotificationLayout.Inbox,
-    );
+      // create reminder
+      final now = DateTime.now();
+      final scheduledDate = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        _selectedTime.hour,
+        _selectedTime.minute,
+      );
+      await NotificationService.scheduleDailyReminderNotification(
+        id: 1, // Unique ID for the reminder
+        title: 'Reminder Title',
+        body: 'Reminder Body',
+        scheduledDate: scheduledDate,
+      );
+      // TODO: show success / fail dialog for schedule reminder
+    }
   }
 
   void _toggleTheme() {

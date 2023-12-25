@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:note_taking_app/constants/padding.dart';
 import 'package:note_taking_app/constants/text_styles.dart';
 import 'package:note_taking_app/model/apis/api_response.dart';
 import 'package:note_taking_app/model/note.dart';
