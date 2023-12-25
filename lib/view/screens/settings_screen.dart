@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:note_taking_app/constants/text_styles.dart';
+import 'package:note_taking_app/utils/notification_service.dart';
 import 'package:note_taking_app/view/widgets/gap.dart';
 import 'package:note_taking_app/view/widgets/screen_wrapper.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -24,6 +26,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _selectedTime = picked;
       });
     }
+
+    await NotificationService.showNotification(
+      title: "Title of the notification",
+      body: "Body of the notification",
+      summary: "Small Summary",
+      notificationLayout: NotificationLayout.Inbox,
+    );
   }
 
   void _toggleTheme() {

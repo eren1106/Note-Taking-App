@@ -3,6 +3,7 @@ import 'package:note_taking_app/constants/nav_items.dart';
 import 'package:note_taking_app/constants/routes.dart';
 import 'package:note_taking_app/constants/strings.dart';
 import 'package:note_taking_app/constants/theme.dart';
+import 'package:note_taking_app/utils/notification_service.dart';
 import 'package:note_taking_app/view/screens/home_screen.dart';
 import 'package:note_taking_app/view/screens/note_collections_screen.dart';
 import 'package:note_taking_app/view/screens/note_detail_screen.dart';
@@ -15,6 +16,8 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.initializeNotification();
   runApp(const MyApp());
 }
 
