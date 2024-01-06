@@ -4,10 +4,12 @@ import 'package:note_taking_app/constants/strings.dart';
 import 'package:note_taking_app/constants/theme.dart';
 import 'package:note_taking_app/services/notification_service.dart';
 import 'package:note_taking_app/view/screens/home_screen.dart';
+import 'package:note_taking_app/view/screens/login_screen.dart';
 import 'package:note_taking_app/view/screens/note_collections_screen.dart';
 import 'package:note_taking_app/view/screens/note_detail_screen.dart';
 import 'package:note_taking_app/view/screens/notes_screen.dart';
 import 'package:note_taking_app/view/screens/settings_screen.dart';
+import 'package:note_taking_app/view/screens/signup_screen.dart';
 import 'package:note_taking_app/view/screens/sticky_notes_screen.dart';
 import 'package:note_taking_app/view/widgets/scaffold_with_nested_navigation.dart';
 import 'package:note_taking_app/view_model/note_view_model.dart';
@@ -27,12 +29,31 @@ final _shellNavigatorAKey = GlobalKey<NavigatorState>(debugLabel: 'shellA');
 final _shellNavigatorBKey = GlobalKey<NavigatorState>(debugLabel: 'shellB');
 final _shellNavigatorCKey = GlobalKey<NavigatorState>(debugLabel: 'shellC');
 final _shellNavigatorDKey = GlobalKey<NavigatorState>(debugLabel: 'shellD');
+// final _authKey = GlobalKey<NavigatorState>(debugLabel: 'auth');
 
 /// The route configuration.
 final GoRouter _router = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/${ROUTES_NAME.login}',
   navigatorKey: _rootNavigatorKey,
+  redirect: (context, state) {
+    debugPrint("REDIRECT!");
+    // TODO: navigate user to home page if authenticated
+    // return '/${ROUTES_NAME.login}';
+    return null;
+  },
   routes: <RouteBase>[
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/${ROUTES_NAME.login}',
+      name: ROUTES_NAME.login,
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/${ROUTES_NAME.signup}',
+      name: ROUTES_NAME.signup,
+      builder: (context, state) => const SignUpScreen(),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         // the UI shell

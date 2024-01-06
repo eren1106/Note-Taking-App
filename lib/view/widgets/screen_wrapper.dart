@@ -7,6 +7,7 @@ class ScreenWrapper extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final bool allowDeviceBack;
   final Function? backCallback;
+  final bool showAppBar;
 
   const ScreenWrapper({
     super.key,
@@ -16,12 +17,13 @@ class ScreenWrapper extends StatelessWidget {
     this.padding = const EdgeInsets.all(20),
     this.allowDeviceBack = true,
     this.backCallback,
+    this.showAppBar = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: showAppBar ? AppBar(
         // backgroundColor: Colors.white,
         // elevation: 0, // to remove shadow
         // centerTitle: true, // to center the title
@@ -31,7 +33,7 @@ class ScreenWrapper extends StatelessWidget {
         // iconTheme: const IconThemeData(
         //   color: Colors.black,
         // ),
-      ),
+      ) : null,
       body: WillPopScope(
         onWillPop: () async {
           backCallback?.call();
